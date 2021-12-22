@@ -11,7 +11,7 @@ var qs = require('querystring');
 
 var isssl = true;//是否启用SSL(矿机到中转服务器)
 var dk = 5555;//本地挖矿端口(矿机要填的挖矿地址里的端口)
-var dk2 = 14444;//矿池挖矿端口(统一使用tcp端口，即使上面开启ssl这里也填矿池的tco端口)
+var dk2 = 14444;//矿池挖矿端口(统一使用tcp端口，即使上面开启ssl这里也填矿池的tcp端口)
 var ym = 'asia2.ethermine.org';//矿池域名或ip
 
 var dk3 = 80;//后台页面端口(直接访浏览器访问ip地址默认就是80端口)
