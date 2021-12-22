@@ -1,0 +1,21 @@
+{
+  "name": "minerserverfee",
+  "version": "1.0.0",
+  "description": "中转抽水服务",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lvbu",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "lodash": "^4.17.21",
+    "net": "^1.0.2",
+    "path": "^0.12.7",
+    "querystring": "^0.2.1",
+    "tls": "^0.0.1"
+  }
+}
