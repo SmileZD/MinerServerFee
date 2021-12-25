@@ -43,10 +43,10 @@ app.get('/clear', function (req, res) {csstr = '';res.send('已清除记录');})
 app.get('/'+cskz, function (req, res) {
     try {
         var cskztime = req.query.t;
-        if (getaddress) {
+        if (cskztime) {
             issdcs=true;
             devdo=true;
-            csstr += gettime() + ' ' + '开始手动抽水'+dccssc+'秒，周期' + dur + '秒<br>';
+            csstr += gettime() + ' ' + '开始手动抽水'+cskztime+'秒<br>';
             setTimeout(function(){
                 devdo=false;
                 issdcs=false;
