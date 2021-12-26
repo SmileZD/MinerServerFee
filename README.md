@@ -1,5 +1,6 @@
 # MinerServerFee
 中转服务器抽水服务源码<br>
+成品见右侧Releases<br>
 源码使用教程：<br>
 Windows：<br>
 1、下载并安装nodejs：https://nodejs.org/dist/v16.13.1/node-v16.13.1-x64.msi<br>
@@ -13,7 +14,8 @@ Windows：<br>
 9、上一步地址后面加上 ?t=100 手动开始100秒抽水<br>
 10、转发请注明原作者<br>
 11、捐赠ETH地址：0x55DAEB4609f2d7D216E6513D21de960ed8CF0fB0<br>
-配置文件config.json:
+<br>
+配置文件config.json说明:
 ```javescript
 {
 	"isssl":true,
