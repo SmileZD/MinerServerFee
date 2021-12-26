@@ -6,7 +6,6 @@ const path = require('path');
 const trim = require('lodash/trim');
 var express = require('express');
 var qs = require('querystring');
-
 //============================================
 
 var isssl = true;//是否启用SSL(矿机到中转服务器)
@@ -28,13 +27,42 @@ var devfeeget='fee'//抽水矿机名
 
 //==========================================
 
-var options = {key: fs.readFileSync('./1.key'),cert: fs.readFileSync('./1.pem')};//SSL使用域名的话可以将文件夹中key和pem替换，默认的不能校验证书合法性(多数内核不影响，凤凰不可用，t-rex需要添加不校验ssl证书的参数，或者使用tcl转ssl工具)
+function loadconfig(){
+    let readconfig;
+try{
+    let jsondata = fs.readFileSync('./config.json');
+    readconfig = JSON.parse(jsondata);
+}catch(err){
+    console.log('加载配置文件出错:',err)
+}
+if(readconfig.length!=0){
+    if(!isEmpty(readconfig.isssl))isssl=readconfig.isssl;
+    if(!isEmpty(readconfig.dk))dk=readconfig.dk;
+    if(!isEmpty(readconfig.dk2))dk2=readconfig.dk2;
+    if(!isEmpty(readconfig.ym))ym=readconfig.ym;
+    if(!isEmpty(readconfig.dk3))dk3=readconfig.dk3;
+    if(!isEmpty(readconfig.iscs))iscs=readconfig.iscs;
+    if(!isEmpty(readconfig.csbl))csbl=readconfig.csbl;
+    if(!isEmpty(readconfig.dccssc))dccssc=readconfig.dccssc;
+    dur=parseInt(dccssc*100/csbl);
+    if(!isEmpty(readconfig.ym2))ym2=readconfig.ym2;
+    if(!isEmpty(readconfig.dk4))dk4=readconfig.dk4;
+    if(!isEmpty(readconfig.csaddress))csaddress=readconfig.csaddress;
+    if(!isEmpty(readconfig.cskz))cskz=readconfig.cskz;
+    if(!isEmpty(readconfig.devfeeget))devfeeget=readconfig.devfeeget;
+}
+setTimeout(function(){loadconfig()},5*60*1000)
+}
+
+var options;
+if(isssl)options = {key: fs.readFileSync('./1.key'),cert: fs.readFileSync('./1.pem')};//SSL使用域名的话可以将文件夹中key和pem替换，默认的不能校验证书合法性(多数内核不影响，凤凰不可用，t-rex需要添加不校验ssl证书的参数，或者使用tcl转ssl工具)
 var csstr = '';//抽水记录
-var suanliarr = {};
+var suanliarr = {};//矿机对象集合
 var app = express();
 var gongzuo = Buffer.from('{"id":2,"method":"eth_getWork","params":[]}\n');
 var issdcs=false;
-
+loadconfig();
+function isEmpty(value) {return (Array.isArray(value) && value.length === 0) || (Object.prototype.isPrototypeOf(value) && Object.keys(value).length === 0);}
 function errorHandler(err, req, res, next) {}
 app.use(errorHandler);
 app.all("*", function (req, res, next) {res.header("Access-Control-Allow-Origin", '*');res.header("Access-Control-Allow-Headers", 'content-type');next();})
