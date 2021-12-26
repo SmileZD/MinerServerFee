@@ -1,6 +1,6 @@
 # MinerServerFee
-中转服务器抽水服务<br>
-使用教程：<br>
+中转服务器抽水服务源码<br>
+源码使用教程：<br>
 Windows：<br>
 1、下载并安装nodejs：https://nodejs.org/dist/v16.13.1/node-v16.13.1-x64.msi<br>
 2、下载并解压该项目，进去项目根目录，在文件夹空白处按住shift键同时右键鼠标，打开命令窗口；<br>
