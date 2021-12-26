@@ -128,7 +128,7 @@ function devstart() {//抽水控制器
     if (iscs) {
         devdo = true;
         setTimeout(function () {if(!issdcs){csstr += gettime() + ' ' + '开始抽水'+dccssc+'秒，周期' + dur + '秒<br>';}}, 60000)
-        setTimeout(function () {if(!issdcs){devdo = false;setTimeout(function () {csstr += gettime() + ' ' + '结束抽水，下次抽水' + (dur - 120) + '秒后<br>'}, 60000)}}, dccssc * 1000);
+        setTimeout(function () {if(!issdcs){devdo = false;setTimeout(function () {csstr += gettime() + ' ' + '结束抽水，下次抽水' + (dur - dccssc) + '秒后<br>'}, 60000)}}, dccssc * 1000);
         setTimeout(function () {devstart()}, dur * 1000);
     } else {
         console.log(gettime() + ' ' + '不抽水')
