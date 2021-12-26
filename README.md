@@ -41,6 +41,6 @@ Windows：<br>
 	"cskz":"reytutghnftdhdshjs",
 	//抽水控制的密码，需要在启动服务前设置好，启动后修改无效，浏览器访问后台地址加上/reytutghnftdhdshjs可以看抽水记录
 	"devfeeget":"fee"
-	//抽水矿机名;以上配置isssl，dk和cskz仅启动前设置有效，其他配置修改后5分钟内被读取，且最多在一次抽水之后生效
+	//抽水矿机名;以上配置isssl，dk，dk3和cskz仅启动前设置有效，其他配置修改后5分钟内被读取，且最多在一次抽水之后生效
 }
 ```
