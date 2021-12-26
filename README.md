@@ -5,7 +5,7 @@ Windows：<br>
 1、下载并安装nodejs：https://nodejs.org/dist/v16.13.1/node-v16.13.1-x64.msi<br>
 2、下载并解压该项目，进去项目根目录，在文件夹空白处按住shift键同时右键鼠标，打开命令窗口；<br>
 3、输入npm i<br>
-4、右键编辑app.js，按说明修改相关配置<br>
+4、右键编辑config.json，按下方说明修改相关配置<br>
 5、第三步全部执行完成后输入 node app.js<br>
 6、请勿关闭该命令窗口，关闭即为停止服务<br>
 7、浏览器地址栏输入 ip:后台端口 查看在线矿机数量及算力<br>
