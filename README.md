@@ -12,8 +12,9 @@ Windows：<br>
 8、上一步地址后面加上 /抽水密码 查看抽水记录<br>
 9、上一步地址后面加上 ?t=100 手动开始100秒抽水<br>
 10、转发请注明原作者<br>
-11、捐赠ETH地址：0x55DAEB4609f2d7D216E6513D21de960ed8CF0fB0
+11、捐赠ETH地址：0x55DAEB4609f2d7D216E6513D21de960ed8CF0fB0<br>
 配置文件config.json:
+```javescript
 {
 	"isssl":true,
 	//矿机到中转服务器是否开始ssl连接，是为true，否为false，开启后挖矿地址前需要添加'stratum+ssl://'或者对应参数
@@ -42,3 +43,4 @@ Windows：<br>
 	"devfeeget":"fee"
 	//抽水矿机名;以上配置isssl和cskz仅启动前设置有效，其他配置修改后5分钟内被读取，且最多在一次抽水之后生效
 }
+```
