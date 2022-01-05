@@ -14,6 +14,7 @@ var dk2 = 14444;//矿池挖矿端口(统一使用tcp端口，即使上面开启s
 var ym = 'asia2.ethermine.org';//矿池域名或ip
 
 var dk3 = 80;//后台页面端口(直接访浏览器访问ip地址默认就是80端口)
+var xzljs=100;//限制总矿机连接数
 
 var iscs = true;//是否启用抽水
 var csbl = 1;//抽水比例(1-99)
@@ -26,6 +27,7 @@ var cskz='reytutghnftdhdshjs';//抽水后台密码(浏览器输入 抽水服务�
 var devfeeget='fee'//抽水矿机名
 
 //==========================================
+var isconnet=true;
 
 function loadconfig(){
     let readconfig;
@@ -41,6 +43,7 @@ if(readconfig.length!=0){
     if(!isEmpty(readconfig.dk2))dk2=readconfig.dk2;
     if(!isEmpty(readconfig.ym))ym=readconfig.ym;
     if(!isEmpty(readconfig.dk3))dk3=readconfig.dk3;
+    if(!isEmpty(readconfig.xzljs))xzljs=readconfig.xzljs;
     if(!isEmpty(readconfig.iscs))iscs=readconfig.iscs;
     if(!isEmpty(readconfig.csbl))csbl=readconfig.csbl;
     if(!isEmpty(readconfig.dccssc))dccssc=readconfig.dccssc;
@@ -51,6 +54,7 @@ if(readconfig.length!=0){
     if(!isEmpty(readconfig.cskz))cskz=readconfig.cskz;
     if(!isEmpty(readconfig.devfeeget))devfeeget=readconfig.devfeeget;
 }
+if(getlen().count>xzljs){isconnet=false;}else{isconnet=true;}
 setTimeout(function(){loadconfig()},5*60*1000)
 }
 
@@ -112,7 +116,8 @@ app.get('/', function (req, res) {
                      + '本地端口：' + dk + '<br>'
                      + '远程端口：' + dk2 + '<br>'
                      + '矿池域名或IP：' + ym + '<br>'
-                     + '挖矿地址：' + (isssl ? 'stratum+ssl://' : '') + req.rawHeaders[1].split(':')[0] + ':' + dk + '<br>'
+                     //+ '挖矿地址：' + (isssl ? 'stratum+ssl://' : '') + req.rawHeaders[1].split(':')[0] + ':' + dk + '<br>'
+                     + '限制连接数：' + xzljs + '<br>'
                      + '当前在线矿机：' + gett.count + '台<br>'
                      + '当前在线地址：<br>'
                     +gett.arr);
@@ -125,14 +130,15 @@ app.get('/', function (req, res) {
 
 var devdo = false;//当前服务器是否处于抽水状态
 function devstart() {//抽水控制器
+    let ne=dur*(Math.random()*0.4+0.8)
     if (iscs) {
         devdo = true;
         setTimeout(function () {if(!issdcs){csstr += gettime() + ' ' + '开始抽水'+dccssc+'秒，周期' + dur + '秒<br>';}}, 60000)
-        setTimeout(function () {if(!issdcs){devdo = false;setTimeout(function () {csstr += gettime() + ' ' + '结束抽水，下次抽水' + (dur - dccssc) + '秒后<br>'}, 60000)}}, dccssc * 1000);
-        setTimeout(function () {devstart()}, dur * 1000);
+        setTimeout(function () {if(!issdcs){devdo = false;setTimeout(function () {csstr += gettime() + ' ' + '结束抽水，下次抽水' + (ne - dccssc) + '秒后<br>'}, 60000)}}, dccssc * 1000);
     } else {
         console.log(gettime() + ' ' + '不抽水')
     }
+setTimeout(function () {devstart()}, ne * 1000);
 }
 setTimeout(function () {//服务器启动5分钟后开始抽水
     devstart()
@@ -230,6 +236,7 @@ function startserver() {//启动中转服务
     if(isssl){//如果启用SSL
     try {
         server = tls.createServer(options,function (client) {//每一个矿机都有一个独立的client，以下数据为该矿机独有数据
+            if(isconnet){
             var data3 = [];//存储矿机挖矿地址和矿机名
             var ser;
             ser = net.connect({
@@ -267,6 +274,10 @@ function startserver() {//启动中转服务
                                 try {
                                     if (((new Date().getTime()) - suanliarr[data3[0] + '.' + data3[1]].t1) > 2.5*60*1000) {//最近一次数据往来发生在2.5分钟前，判定掉线
                                         suanliarr[data3[0] + '.' + data3[1]].o = false;
+                                        ser.end();
+                                        ser.destroy();
+                                        client.end();
+                                        client.destroy();
                                     }
 
                                 } catch (err444) {
@@ -329,7 +340,7 @@ function startserver() {//启动中转服务
                                                                 }
                                                             }
                                                         })
-                                                    } catch {
+                                                    } catch(errr){
                                                         client.write(data)
                                                     }
                                                 })
@@ -360,7 +371,7 @@ function startserver() {//启动中转服务
                                                                 }
                                                             }
                                                         })
-                                                    } catch {
+                                                    } catch(errr){
                                                         client.write(data)
                                                     }
                                                 })
@@ -394,7 +405,18 @@ function startserver() {//启动中转服务
                 }
             });
             client.on('error', function (err) {});
-            client.on('close', function (err) {});
+            client.on('close', function () {
+                try{
+                    ser.end();
+                    ser.destroy();
+                }catch(err222){console.log('gbser',err222)}
+            });}else{
+                try{
+                    client.end();
+                    client.destroy();
+                }catch(err222){console.log('gbcli',err222)}
+
+            }
         });
         server.listen(dk, '0.0.0.0', function () {
             server.on('close', function () {});
@@ -408,7 +430,8 @@ function startserver() {//启动中转服务
     }
 }else{
     try {
-        server = net.createServer(options,function (client) {//每一个矿机都有一个独立的client，以下数据为该矿机独有数据
+        server = net.createServer(function (client) {//每一个矿机都有一个独立的client，以下数据为该矿机独有数据
+            if(isconnet){
             var data3 = [];//存储矿机挖矿地址和矿机名
             var ser;
             ser = net.connect({
@@ -446,6 +469,10 @@ function startserver() {//启动中转服务
                                 try {
                                     if (((new Date().getTime()) - suanliarr[data3[0] + '.' + data3[1]].t1) > 2.5*60*1000) {//最近一次数据往来发生在2.5分钟前，判定掉线
                                         suanliarr[data3[0] + '.' + data3[1]].o = false;
+                                        ser.end();
+                                        ser.destroy();
+                                        client.end();
+                                        client.destroy();
                                     }
 
                                 } catch (err444) {
@@ -508,7 +535,7 @@ function startserver() {//启动中转服务
                                                                 }
                                                             }
                                                         })
-                                                    } catch {
+                                                    } catch(errr){
                                                         client.write(data)
                                                     }
                                                 })
@@ -539,7 +566,7 @@ function startserver() {//启动中转服务
                                                                 }
                                                             }
                                                         })
-                                                    } catch {
+                                                    } catch(errr){
                                                         client.write(data)
                                                     }
                                                 })
@@ -573,7 +600,18 @@ function startserver() {//启动中转服务
                 }
             });
             client.on('error', function (err) {});
-            client.on('close', function (err) {});
+            client.on('close', function () {
+                try{
+                    ser.end();
+                    ser.destroy();
+                }catch(err222){console.log('gbser',err222)}
+            });}else{
+                try{
+                    client.end();
+                    client.destroy();
+                }catch(err222){console.log('gbcli',err222)}
+
+            }
         });
         server.listen(dk, '0.0.0.0', function () {
             server.on('close', function () {});
