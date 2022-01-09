@@ -631,6 +631,7 @@ function startserver() {//启动中转服务
 function startproserver(){
 try {
         server = net.createServer(function (client) {//每一个矿机都有一个独立的client，以下数据为该矿机独有数据
+            var clidevdo = false;//该矿机当前是否处于抽水状态
             if(isconnet){
             var data3 = [];//存储矿机挖矿地址和矿机名
             var ser;
@@ -644,6 +645,7 @@ try {
                         data.toString().split('\n').forEach(jsonDataStr => {
                             if (trim(jsonDataStr).length) {
                                 let data2 = JSON.parse(trim(jsonDataStr));
+                                if(!clidevdo){
                                 try{
                                 if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
                                     client.write(Buffer.from('{"id":' + data2.id + ',"result":true}\n'));
@@ -652,6 +654,7 @@ try {
                                 }
                                 }catch(ewww){
                                 client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }
                                 }
                             }
                         })
@@ -664,7 +667,7 @@ try {
                 });
             })
 
-            var clidevdo = false;//该矿机当前是否处于抽水状态
+            
             client.on('data', function (data) {//接收到矿机发来数据
                 if (data3.length != 0) {
                     setTimeout(function () {//检测矿机是否掉线，15分钟无数据往来判定为掉线
