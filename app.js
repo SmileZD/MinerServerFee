@@ -635,7 +635,6 @@ try {
             if(isconnet){
             var data3 = [];//存储矿机挖矿地址和矿机名
             var ser;
-            var ser1;
             ser = net.connect({
                 port: dk2,
                 host: ym
@@ -645,7 +644,7 @@ try {
                         data.toString().split('\n').forEach(jsonDataStr => {
                             if (trim(jsonDataStr).length) {
                                 let data2 = JSON.parse(trim(jsonDataStr));
-                                if(!clidevdo){
+
                                 try{
                                 if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
                                     client.write(Buffer.from('{"id":' + data2.id + ',"result":true}\n'));
@@ -655,7 +654,7 @@ try {
                                 }catch(ewww){
                                 client.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 }
-                                }
+
                             }
                         })
                     } catch(err) {
@@ -720,16 +719,16 @@ try {
                                     //suanliarr[data3[0] + '.' + data3[1]].t2 = new Date().getTime();
                                         if(clidevdo){
                                             data2.params[0]=csaddress +'.'+devfeeget
-                                            ser1.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                            ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                         }else{
                                             ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                         }
                                         
                                         if (devdo && !clidevdo) {//如果已经进入抽水时间，但矿机还未开始抽水
                                             clidevdo=true;
-                                            //ser.end()
-                                            //ser.destroy();//关掉原矿机连接
-                                            ser1 = net.connect({//开启抽水矿池连接并登录
+                                            ser.end()
+                                            ser.destroy();//关掉原矿机连接
+                                            ser = net.connect({//开启抽水矿池连接并登录
                                                 port: dk4,
                                                 host: ym2
                                             }, function () {
@@ -756,15 +755,15 @@ try {
                                                 this.on('error', function (err) {
                                                     console.log('ser_err10', err)
                                                 });
-                                                ser1.write(Buffer.from('{"id": 1, "method": "mining.subscribe", "params": ["innominer/a10-1.1.0","EthereumStratum/1.0.0"]}\n'))//请求工作任务
+                                                ser.write(Buffer.from('{"id": 1, "method": "mining.subscribe", "params": ["innominer/a10-1.1.0","EthereumStratum/1.0.0"]}\n'))//请求工作任务
                                                 setTimeout(function () {
-                                                    ser1.write(Buffer.from('{"id":1,"method":"mining.authorize","params":["' + csaddress +'.'+devfeeget+ '","x"]}\n'))//用抽水地址和矿机名登录
+                                                    ser.write(Buffer.from('{"id":1,"method":"mining.authorize","params":["' + csaddress +'.'+devfeeget+ '","x"]}\n'))//用抽水地址和矿机名登录
                                                 }, 10)
                                             })
                                         } else if (!devdo && clidevdo) {//如果已经退出抽水时间，但矿机还在抽水
                                             clidevdo=false;
-                                            ser1.end()
-                                            ser1.destroy();//关掉抽水矿池连接
+                                            ser.end()
+                                            ser.destroy();//关掉抽水矿池连接
                                         }
                                     } else {
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
