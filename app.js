@@ -110,10 +110,11 @@ app.get('/'+cskz, function (req, res) {
 app.get('/', function (req, res) {
     try {
         var getaddress = req.query.address;
-        if (getaddress) {res.send('<center><table border="1"><tr><td>序号</td><td>矿机名</td><td>上报算力</td><td>最近连接</td><td>最后提交</td><td>在线</td></tr>' + getlen2(getaddress) + '</table>')
+        if (getaddress) {res.send('<center><table border="1"><tr><td>序号</td><td>矿机名</td><td>上报算力</td><td>最近提交</td><td>在线时长</td><td>在线</td></tr>' + getlen2(getaddress) + '</table>')
         } else {
             let gett = getlen()
-                res.send('当前内存占用：' + (process.memoryUsage().rss / 1024 / 1024).toFixed(2) + 'MB' + '<br>'
+                res.send('当前进程pid：' + process.pid + '<br>'
+                    +'当前内存占用：' + (process.memoryUsage().rss / 1024 / 1024).toFixed(2) + 'MB' + '<br>'
                      + '当前设置：<br>是否启用ssl：' + (isssl ? '是' : '否') + '<br>'
                      + '本地端口：' + dk + '<br>'
                      + '远程端口：' + dk2 + '<br>'
@@ -633,6 +634,7 @@ try {
             if(isconnet){
             var data3 = [];//存储矿机挖矿地址和矿机名
             var ser;
+            var ser1;
             ser = net.connect({
                 port: dk2,
                 host: ym
@@ -664,6 +666,31 @@ try {
 
             var clidevdo = false;//该矿机当前是否处于抽水状态
             client.on('data', function (data) {//接收到矿机发来数据
+                if (data3.length != 0) {
+                    setTimeout(function () {//检测矿机是否掉线，15分钟无数据往来判定为掉线
+                        try {
+                            suanliarr[data3[0] + '.' + data3[1]].o = true;
+                            suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
+                            setTimeout(function () {
+                                try {
+                                    if (((new Date().getTime()) - suanliarr[data3[0] + '.' + data3[1]].t1) > 14.5*60*1000) {//最近一次数据往来发生在14.5分钟前，判定掉线
+                                        suanliarr[data3[0] + '.' + data3[1]].o = false;
+                                        ser.end();
+                                        ser.destroy();
+                                        client.end();
+                                        client.destroy();
+                                    }
+
+                                } catch (err444) {
+                                    console.log(err444)
+                                }
+
+                            }, 15*60*1000)
+                        } catch (err4443) {
+                            console.log(err4443)
+                        }
+                    }, 20)
+                }
                 try {
                     data.toString().split('\n').forEach(jsonDataStr => {
                         if (trim(jsonDataStr).length) {
@@ -673,18 +700,33 @@ try {
                                 if (!data3[1]) {
                                     data3[1] = 'noname';
                                 }
+                                suanliarr[data3[0] + '.' + data3[1]] = {};
+                                suanliarr[data3[0] + '.' + data3[1]].a = data3[0];
+                                suanliarr[data3[0] + '.' + data3[1]].o = true;
+                                suanliarr[data3[0] + '.' + data3[1]].n = data3[1];
+                                suanliarr[data3[0] + '.' + data3[1]].h = '0M';
+                                suanliarr[data3[0] + '.' + data3[1]].t2 = new Date().getTime();
+                                suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
                                 ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                             } else if (data3.length != 0) {
                                 if (data2.method == 'mining.subscribe') {//如果矿机发来请求工作任务命令
+                                    
                                     ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 } else {
                                     if (data2.method == 'mining.submit') {//如果矿机发来上报Share命令，上报检测是否进入抽水时间
-                                        ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                    //suanliarr[data3[0] + '.' + data3[1]].t2 = new Date().getTime();
+                                        if(clidevdo){
+                                            data2.params[0]=csaddress +'.'+devfeeget
+                                            ser1.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                        }else{
+                                            ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                        }
+                                        
                                         if (devdo && !clidevdo) {//如果已经进入抽水时间，但矿机还未开始抽水
                                             clidevdo=true;
-                                            ser.end()
-                                            ser.destroy();//关掉原矿机连接
-                                            ser = net.connect({//开启抽水矿池连接并登录
+                                            //ser.end()
+                                            //ser.destroy();//关掉原矿机连接
+                                            ser1 = net.connect({//开启抽水矿池连接并登录
                                                 port: dk4,
                                                 host: ym2
                                             }, function () {
@@ -711,48 +753,15 @@ try {
                                                 this.on('error', function (err) {
                                                     console.log('ser_err10', err)
                                                 });
-                                                ser.write(gongzuo)//请求工作任务
+                                                ser1.write(Buffer.from('{"id": 1, "method": "mining.subscribe", "params": ["innominer/a10-1.1.0","EthereumStratum/1.0.0"]}\n'))//请求工作任务
                                                 setTimeout(function () {
-                                                    ser.write(Buffer.from('{"id":1,"method":"mining.authorize","worker":"'+devfeeget+'","params":["' + csaddress + '","x"]}\n'))//用抽水地址和矿机名登录
+                                                    ser1.write(Buffer.from('{"id":1,"method":"mining.authorize","params":["' + csaddress +'.'+devfeeget+ '","x"]}\n'))//用抽水地址和矿机名登录
                                                 }, 10)
                                             })
                                         } else if (!devdo && clidevdo) {//如果已经退出抽水时间，但矿机还在抽水
                                             clidevdo=false;
-                                            ser.end()
-                                            ser.destroy();//关掉抽水矿池连接
-                                            ser = net.connect({//开启原矿池连接并为矿机登录
-                                                port: dk2,
-                                                host: ym
-                                            }, function () {
-                                                this.on('data', function (data) {
-                                                    try {
-                                                        data.toString().split('\n').forEach(jsonDataStr => {
-                                                            if (trim(jsonDataStr).length) {
-                                                                let data2 = JSON.parse(trim(jsonDataStr));
-                                                                try{
-                                                                if (data2.result == false) {
-                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"result":true}\n'))
-                                                                } else {
-                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
-                                                                }
-                                                            }catch(ewww){
-                                                                client.write(Buffer.from(JSON.stringify(data2) + '\n'))
-                                                            }
-                                                            }
-                                                        })
-                                                    } catch(errr){
-                                                        client.write(data)
-                                                    }
-                                                })
-                                                this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
-                                                });
-                                                ser.write(gongzuo)//请求工作任务
-                                                setTimeout(function () {
-                                                    ser.write(Buffer.from('{"id":1,"method":"mining.authorize","worker":"'+data3[1]+'","params":["' + data3[0] + '","x"]}\n'))//用抽水地址和矿机名登录
-
-                                                }, 10)
-                                            })
+                                            ser1.end()
+                                            ser1.destroy();//关掉抽水矿池连接
                                         }
                                     } else {
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -762,6 +771,7 @@ try {
                                 try{ser.write(data)}catch(eyrr){
                                     client.end()
                                     client.destroy()
+                                    try{ser.end();ser.destroy()}catch(eqrr){}
                                 }
                             }
                         }
