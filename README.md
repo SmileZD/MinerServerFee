@@ -21,8 +21,6 @@ Linux：<br>
 配置文件config.json说明:
 ```javescript
 {
-	"ispro":false,
-	//是否是用于专业矿机，是为true，否为false
 	"isssl":true,
 	//矿机到中转服务器是否开始ssl连接，是为true，否为false，开启后挖矿地址前需要添加'stratum+ssl://'或者对应参数
 	"dk":5555,
