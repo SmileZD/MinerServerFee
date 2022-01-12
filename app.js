@@ -663,7 +663,6 @@ function startserver() {//启动中转服务
                                 }else{
                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 }}
-                                                            }
                                                         })
                                                     } catch(errr){
                                                         client.write(data)
