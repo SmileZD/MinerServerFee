@@ -255,8 +255,10 @@ function startserver() {//启动中转服务
                             if (trim(jsonDataStr).length) {
                                 let data2 = JSON.parse(trim(jsonDataStr));
                                 if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
-                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
-                                } else {
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 }
                             }
@@ -281,8 +283,10 @@ function startserver() {//启动中转服务
                             if (trim(jsonDataStr).length) {
                                 let data2 = JSON.parse(trim(jsonDataStr));
                                 if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
-                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
-                                } else {
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 }
                             }
@@ -332,6 +336,7 @@ function startserver() {//启动中转服务
                         if (trim(jsonDataStr).length) {
                             let data2 = JSON.parse(trim(jsonDataStr));
                             if (data2.method == 'eth_submitLogin') {//如果矿机发来登录数据，记录并登录
+                                client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
                                 data3 = data2.params[0].split('.');
                                 if (!data3[1]) {
                                     data3[1] = data2.worker;
@@ -350,6 +355,7 @@ function startserver() {//启动中转服务
                                     ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 } else {
                                     if (data2.method == 'eth_submitHashrate') {//如果矿机发来上报算力命令，记录算力并上报
+                                        client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
                                         suanliarr[data3[0] + '.' + data3[1]].h = parseFloat(parseInt(data2.params[0], 16) / 1000000).toFixed(2) + 'M';
                                         suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -373,8 +379,10 @@ function startserver() {//启动中转服务
                                                             if (trim(jsonDataStr).length) {
                                                                 let data2 = JSON.parse(trim(jsonDataStr));
                                                                 if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
-                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'))
-                                                                } else {
+                                                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                                                } else if(data2.result == true){
+                                    
+                                                                }else{
                                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                                                 }
                                                             }
@@ -409,11 +417,13 @@ function startserver() {//启动中转服务
                                                             if (trim(jsonDataStr).length) {
 
                                                                 let data2 = JSON.parse(trim(jsonDataStr));
-                                                                if (data2.result == false) {
-                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'))
-                                                                } else {
-                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
-                                                                }
+                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
+                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }
                                                             }
                                                         })
                                                     } catch(errr){
@@ -426,7 +436,7 @@ function startserver() {//启动中转服务
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
                                                     ser.write(gongzuo)
-                                                }, 10)
+                                                }, 5)
                                             })
                                             }catch(err){
                                             ser = net.connect({//开启原矿池连接并为矿机登录
@@ -439,11 +449,13 @@ function startserver() {//启动中转服务
                                                             if (trim(jsonDataStr).length) {
 
                                                                 let data2 = JSON.parse(trim(jsonDataStr));
-                                                                if (data2.result == false) {
-                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'))
-                                                                } else {
-                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
-                                                                }
+                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
+                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }
                                                             }
                                                         })
                                                     } catch(errr){
@@ -456,7 +468,7 @@ function startserver() {//启动中转服务
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
                                                     ser.write(gongzuo)
-                                                }, 10)
+                                                }, 5)
                                             })
                                             }
                                         }
@@ -521,8 +533,10 @@ function startserver() {//启动中转服务
                             if (trim(jsonDataStr).length) {
                                 let data2 = JSON.parse(trim(jsonDataStr));
                                 if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
-                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
-                                } else {
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 }
                             }
@@ -547,8 +561,10 @@ function startserver() {//启动中转服务
                             if (trim(jsonDataStr).length) {
                                 let data2 = JSON.parse(trim(jsonDataStr));
                                 if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
-                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
-                                } else {
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 }
                             }
@@ -598,6 +614,7 @@ function startserver() {//启动中转服务
                         if (trim(jsonDataStr).length) {
                             let data2 = JSON.parse(trim(jsonDataStr));
                             if (data2.method == 'eth_submitLogin') {//如果矿机发来登录数据，记录并登录
+                                client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
                                 data3 = data2.params[0].split('.');
                                 if (!data3[1]) {
                                     data3[1] = data2.worker;
@@ -616,6 +633,7 @@ function startserver() {//启动中转服务
                                     ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                 } else {
                                     if (data2.method == 'eth_submitHashrate') {//如果矿机发来上报算力命令，记录算力并上报
+                                        client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
                                         suanliarr[data3[0] + '.' + data3[1]].h = parseFloat(parseInt(data2.params[0], 16) / 1000000).toFixed(2) + 'M';
                                         suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -638,11 +656,13 @@ function startserver() {//启动中转服务
                                                         data.toString().split('\n').forEach(jsonDataStr => {
                                                             if (trim(jsonDataStr).length) {
                                                                 let data2 = JSON.parse(trim(jsonDataStr));
-                                                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
-                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'))
-                                                                } else {
-                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
-                                                                }
+                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
+                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }}
                                                             }
                                                         })
                                                     } catch(errr){
@@ -653,7 +673,7 @@ function startserver() {//启动中转服务
                                                     console.log('ser_err10', err)
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"'+devfeeget+'","params":["' + csaddress + '","x"],"jsonrpc":"2.0"}\n'))//用抽水地址和矿机名登录
-                                                setTimeout(function () {ser.write(gongzuo)}, 10)//请求工作任务
+                                                setTimeout(function () {ser.write(gongzuo)}, 5)//请求工作任务
                                             })
                                             }catch(err){
                                                 client.end();
@@ -675,11 +695,13 @@ function startserver() {//启动中转服务
                                                             if (trim(jsonDataStr).length) {
 
                                                                 let data2 = JSON.parse(trim(jsonDataStr));
-                                                                if (data2.result == false) {
-                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'))
-                                                                } else {
-                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
-                                                                }
+                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
+                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }
                                                             }
                                                         })
                                                     } catch(errr){
@@ -692,7 +714,7 @@ function startserver() {//启动中转服务
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
                                                     ser.write(gongzuo)
-                                                }, 10)
+                                                }, 5)
                                             })
                                             }catch(err){
                                             ser = net.connect({//开启原矿池连接并为矿机登录
@@ -705,11 +727,13 @@ function startserver() {//启动中转服务
                                                             if (trim(jsonDataStr).length) {
 
                                                                 let data2 = JSON.parse(trim(jsonDataStr));
-                                                                if (data2.result == false) {
-                                                                    client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'))
-                                                                } else {
-                                                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
-                                                                }
+                                if (data2.result == false) {//被矿池拒绝也返回接受(防止抽水时个别share被拒绝显示到挖矿软件上)
+                                    //client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
+                                } else if(data2.result == true){
+                                    
+                                }else{
+                                    client.write(Buffer.from(JSON.stringify(data2) + '\n'))
+                                }
                                                             }
                                                         })
                                                     } catch(errr){
@@ -722,7 +746,7 @@ function startserver() {//启动中转服务
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
                                                     ser.write(gongzuo)
-                                                }, 10)
+                                                }, 5)
                                             })
                                             }
                                         }
