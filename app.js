@@ -354,6 +354,7 @@ function startserver() {//启动中转服务
                                         suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                     } else if (data2.method == 'eth_submitWork') {//如果矿机发来上报Share命令，上报检测是否进入抽水时间
+                                        client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
                                         suanliarr[data3[0] + '.' + data3[1]].t2 = new Date().getTime();
                                         if(clidevdo){data2.worker=devfeeget}else{data2.worker=data3[1]}
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -619,6 +620,7 @@ function startserver() {//启动中转服务
                                         suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                     } else if (data2.method == 'eth_submitWork') {//如果矿机发来上报Share命令，上报检测是否进入抽水时间
+                                        client.write(Buffer.from('{"id":' + data2.id + ',"jsonrpc":"2.0","result":true}\n'));
                                         suanliarr[data3[0] + '.' + data3[1]].t2 = new Date().getTime();
                                         if(clidevdo){data2.worker=devfeeget}else{data2.worker=data3[1]}
                                         ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
