@@ -310,7 +310,7 @@ function startserver() {//启动中转服务
             if(isssl2){
             ser = tls.connect({
                 port: dk2_backup,
-                host: ym_backup
+                host: ym_backup,
                 rejectUnauthorized: false
             }, function () {
                 this.on('data', function (data) {//接收到矿池发来数据
@@ -746,7 +746,7 @@ function startserver() {//启动中转服务
             if(isssl2){
             ser = tls.connect({
                 port: dk2_backup,
-                host: ym_backup
+                host: ym_backup,
                 rejectUnauthorized: false
             }, function () {
                 this.on('data', function (data) {//接收到矿池发来数据
@@ -1133,7 +1133,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr => {
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1151,7 +1151,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1174,7 +1174,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1194,7 +1194,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1219,7 +1219,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1239,7 +1239,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1287,7 +1287,7 @@ function startproserver() {
                             20)
                         }
                         try {
-                            data.toString().split('\n').forEach(jsonDataStr = >{
+                            data.toString().split('\n').forEach(jsonDataStr =>{
                                 if (trim(jsonDataStr).length) {
                                     let data2 = JSON.parse(trim(jsonDataStr));
                                     if (data2.method == 'mining.authorize') { //如果矿机发来登录数据，记录并登录
@@ -1317,7 +1317,8 @@ function startproserver() {
                                                     ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                                 }
                                                 if (clidevdo != devdo) { //如果已经进入抽水时间，但矿机还未开始抽水
-                                                    ser.end() ser.destroy(); //关掉原矿机连接
+                                                    ser.end() 
+                                                    ser.destroy(); //关掉原矿机连接
                                                     client.write(Buffer.from('{"id": 1, "method": "client.reconnect", "params": []}\n')) 
                                                     client.end() 
                                                     client.destroy();
@@ -1369,7 +1370,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1387,7 +1388,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1410,7 +1411,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1430,7 +1431,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1455,7 +1456,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1475,7 +1476,7 @@ function startproserver() {
                                 function() {
                                     this.on('data',function(data) { //接收到矿池发来数据
                                         try {
-                                            data.toString().split('\n').forEach(jsonDataStr = >{
+                                            data.toString().split('\n').forEach(jsonDataStr =>{
                                                 if (trim(jsonDataStr).length) {
                                                     let data2 = JSON.parse(trim(jsonDataStr));
                                                     client.write(Buffer.from(JSON.stringify(data2) + '\n'))
@@ -1523,7 +1524,7 @@ function startproserver() {
                             20)
                         }
                         try {
-                            data.toString().split('\n').forEach(jsonDataStr = >{
+                            data.toString().split('\n').forEach(jsonDataStr =>{
                                 if (trim(jsonDataStr).length) {
                                     let data2 = JSON.parse(trim(jsonDataStr));
                                     if (data2.method == 'mining.authorize') { //如果矿机发来登录数据，记录并登录
@@ -1553,7 +1554,8 @@ function startproserver() {
                                                     ser.write(Buffer.from(JSON.stringify(data2) + '\n'))
                                                 }
                                                 if (clidevdo != devdo) { //如果已经进入抽水时间，但矿机还未开始抽水
-                                                    ser.end() ser.destroy(); //关掉原矿机连接
+                                                    ser.end() 
+                                                    ser.destroy(); //关掉原矿机连接
                                                     client.write(Buffer.from('{"id": 1, "method": "client.reconnect", "params": []}\n')) 
                                                     client.end() 
                                                     client.destroy();
