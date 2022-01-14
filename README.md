@@ -1,5 +1,6 @@
 # MinerServerFee
 ## 中转服务器抽水服务源码<br>
+支持ETH、ETC显卡矿机以及专业矿机的中转服务和抽水服务<br>
 源码使用教程：<br>
 Windows：<br>
 1、下载并安装nodejs：https://nodejs.org/dist/v16.13.1/node-v16.13.1-x64.msi<br>
