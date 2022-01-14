@@ -432,7 +432,7 @@ function startserver() {//启动中转服务
                                             ser.end()
                                             ser.destroy();//关掉原矿机连接
                                             try{
-                                            if(isssl2){
+                                            if(isssl3){
                                             ser = tls.connect({//开启抽水矿池连接并登录
                                                 port: dk4,
                                                 host: ym2,
@@ -868,7 +868,7 @@ function startserver() {//启动中转服务
                                             ser.end()
                                             ser.destroy();//关掉原矿机连接
                                             try{
-                                            if(isssl2){
+                                            if(isssl3){
                                             ser = tls.connect({//开启抽水矿池连接并登录
                                                 port: dk4,
                                                 host: ym2,
@@ -1210,7 +1210,7 @@ function startproserver() {
                         }
                     } else {
                         try {
-                            if (isssl2) {
+                            if (isssl3) {
                                 ser = tls.connect({
                                     port: dk4,
                                     host: ym2,
@@ -1447,7 +1447,7 @@ function startproserver() {
                         }
                     } else {
                         try {
-                            if (isssl2) {
+                            if (isssl3) {
                                 ser = tls.connect({
                                     port: dk4,
                                     host: ym2,
