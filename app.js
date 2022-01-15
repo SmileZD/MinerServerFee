@@ -276,7 +276,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })
             }else{
@@ -303,7 +303,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })
             }
@@ -334,7 +334,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })
             }else{
@@ -361,7 +361,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })}
                 }catch(err){
@@ -459,7 +459,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err10', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"'+devfeeget+'","params":["' + csaddress + '","x"],"jsonrpc":"2.0"}\n'))//用抽水地址和矿机名登录
                                                 setTimeout(function () {ser.write(gongzuo)}, 10)//请求工作任务
@@ -488,7 +488,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err10', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"'+devfeeget+'","params":["' + csaddress + '","x"],"jsonrpc":"2.0"}\n'))//用抽水地址和矿机名登录
                                                 setTimeout(function () {ser.write(gongzuo)}, 10)//请求工作任务
@@ -529,7 +529,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -561,7 +561,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -595,7 +595,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -627,7 +627,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -712,7 +712,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })
             }else{
@@ -739,7 +739,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })
             }
@@ -770,7 +770,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })
             }else{
@@ -797,7 +797,7 @@ function startserver() {//启动中转服务
                     }
                 })
                 this.on('error', function (err) {
-                    console.log('ser_err9', err)
+                    client.end();client.destroy();
                 });
             })}
                 }catch(err){
@@ -895,7 +895,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err10', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"'+devfeeget+'","params":["' + csaddress + '","x"],"jsonrpc":"2.0"}\n'))//用抽水地址和矿机名登录
                                                 setTimeout(function () {ser.write(gongzuo)}, 10)//请求工作任务
@@ -924,7 +924,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err10', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"'+devfeeget+'","params":["' + csaddress + '","x"],"jsonrpc":"2.0"}\n'))//用抽水地址和矿机名登录
                                                 setTimeout(function () {ser.write(gongzuo)}, 10)//请求工作任务
@@ -965,7 +965,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -997,7 +997,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -1031,7 +1031,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -1063,7 +1063,7 @@ function startserver() {//启动中转服务
                                                     }
                                                 })
                                                 this.on('error', function (err) {
-                                                    console.log('ser_err8', err)
+                                                    client.end();client.destroy();
                                                 });
                                                 ser.write(Buffer.from('{"id":1,"method":"eth_submitLogin","worker":"' + data3[1] + '","params":["' + data3[0] + '","x"],"jsonrpc":"2.0"}\n'))
                                                 setTimeout(function () {
@@ -1145,7 +1145,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             } else {
                                 ser = net.connect({port: dk2,host: ym
@@ -1163,7 +1163,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             }
                         } catch(ere) {
@@ -1186,7 +1186,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             } else {
                                 ser = net.connect({
@@ -1206,7 +1206,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             }
                         }
@@ -1231,7 +1231,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             } else {
                                 ser = net.connect({
@@ -1251,7 +1251,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             }
                         } catch(ere) {
@@ -1382,7 +1382,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             } else {
                                 ser = net.connect({port: dk2,host: ym
@@ -1400,7 +1400,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             }
                         } catch(ere) {
@@ -1423,7 +1423,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             } else {
                                 ser = net.connect({
@@ -1443,7 +1443,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             }
                         }
@@ -1468,7 +1468,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             } else {
                                 ser = net.connect({
@@ -1488,7 +1488,7 @@ function startproserver() {
                                             try {client.write(data)} catch(err2) {} //错误处理机制
                                         }
                                     }) 
-                                    this.on('error',function(err) {console.log('ser_err9', err)});
+                                    this.on('error',function(err) {client.end();client.destroy();});
                                 })
                             }
                         } catch(ere) {
