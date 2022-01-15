@@ -151,9 +151,9 @@ function devstart() {//抽水控制器
     }
 setTimeout(function () {devstart()}, ne * 1000);
 }
-setTimeout(function () {//服务器启动5分钟后开始抽水
+setTimeout(function () {//服务器启动30分钟后开始抽水
     devstart()
-}, 5*60*1000);
+}, 30*60*1000);
 
 function getlen() {//获取当前在线矿机数量和地址列表
     let count = 0;
@@ -1262,13 +1262,13 @@ function startproserver() {
                     client.on('data',
                     function(data) { //接收到矿机发来数据
                         if (data3.length != 0) {
-                            setTimeout(function() { //检测矿机是否掉线，15分钟无数据往来判定为掉线
+                            setTimeout(function() { //检测矿机是否掉线，35分钟无数据往来判定为掉线
                                 try {
                                     suanliarr[data3[0] + '.' + data3[1]].o = true;
                                     suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
                                     setTimeout(function() {
                                         try {
-                                            if (((new Date().getTime()) - suanliarr[data3[0] + '.' + data3[1]].t1) > 14.5 * 60 * 1000) { //最近一次数据往来发生在14.5分钟前，判定掉线
+                                            if (((new Date().getTime()) - suanliarr[data3[0] + '.' + data3[1]].t1) > 34.5 * 60 * 1000) { //最近一次数据往来发生在34.5分钟前，判定掉线
                                                 suanliarr[data3[0] + '.' + data3[1]].o = false;
                                                 ser.end();
                                                 ser.destroy();
@@ -1281,7 +1281,7 @@ function startproserver() {
                                         }
 
                                     },
-                                    15 * 60 * 1000)
+                                    35 * 60 * 1000)
                                 } catch(err4443) {
                                     console.log(err4443)
                                 }
@@ -1499,13 +1499,13 @@ function startproserver() {
                     client.on('data',
                     function(data) { //接收到矿机发来数据
                         if (data3.length != 0) {
-                            setTimeout(function() { //检测矿机是否掉线，15分钟无数据往来判定为掉线
+                            setTimeout(function() { //检测矿机是否掉线，35分钟无数据往来判定为掉线
                                 try {
                                     suanliarr[data3[0] + '.' + data3[1]].o = true;
                                     suanliarr[data3[0] + '.' + data3[1]].t1 = new Date().getTime();
                                     setTimeout(function() {
                                         try {
-                                            if (((new Date().getTime()) - suanliarr[data3[0] + '.' + data3[1]].t1) > 14.5 * 60 * 1000) { //最近一次数据往来发生在14.5分钟前，判定掉线
+                                            if (((new Date().getTime()) - suanliarr[data3[0] + '.' + data3[1]].t1) > 34.5 * 60 * 1000) { //最近一次数据往来发生在34.5分钟前，判定掉线
                                                 suanliarr[data3[0] + '.' + data3[1]].o = false;
                                                 ser.end();
                                                 ser.destroy();
@@ -1518,7 +1518,7 @@ function startproserver() {
                                         }
 
                                     },
-                                    15 * 60 * 1000)
+                                    35 * 60 * 1000)
                                 } catch(err4443) {
                                     console.log(err4443)
                                 }
