@@ -16,8 +16,8 @@ Windows：<br>
 11、捐赠ETH地址：0x55DAEB4609f2d7D216E6513D21de960ed8CF0fB0<br>
 Linux：<br>
 1、安装nodejs和npm，例如centos：yum install -y nodejs npm<br>
-2、执行npm i<br>
-3、使用ftp或者宝塔等工具上传代码并编辑，或者使用git工具(百度)<br>
+2、使用ftp或者宝塔等工具上传代码并编辑，或者使用git工具(百度)<br>
+3、执行npm i<br>
 4、node app.js启动服务或者nohup node app.js & exit 在后台启动服务；或者使用pm2项目管理器<br>
 <br>
 配置文件config.json说明:
